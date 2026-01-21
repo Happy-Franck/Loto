@@ -3,457 +3,54 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Simulation de Tirage Loto</title>
-    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet">
-    <style>
-        :root {
-            --primary-color: #2c3e50;
-            --accent-color: #e74c3c;
-            --background-color: #ecf0f1;
-            --card-color: #ffffff;
-            --text-color: #2c3e50;
-        }
-
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
-
-        body {
-            font-family: 'Poppins', sans-serif;
-            background-color: var(--background-color);
-            color: var(--text-color);
-            line-height: 1.6;
-            padding: 2rem;
-        }
-
-        .container {
-            max-width: 1400px;
-            margin: 0 auto;
-            padding: 0 1rem;
-        }
-
-        .tickets-container {
-            display: flex;
-            flex-wrap: wrap;
-            gap: 1.5rem;
-            padding: 1rem;
-            justify-content: flex-start;
-        }
-
-        h1 {
-            font-size: 2.5rem;
-            color: var(--primary-color);
-            text-align: center;
-            margin-bottom: 2rem;
-            text-transform: uppercase;
-            letter-spacing: 2px;
-            position: relative;
-        }
-
-        h1::after {
-            content: '';
-            display: block;
-            width: 100px;
-            height: 4px;
-            background: var(--accent-color);
-            margin: 1rem auto;
-            border-radius: 2px;
-        }
-
-        .controls {
-            display: flex;
-            justify-content: center;
-            gap: 1rem;
-            margin-bottom: 2rem;
-        }
-
-        input[type="number"] {
-            padding: 0.8rem;
-            border: 2px solid var(--primary-color);
-            border-radius: 8px;
-            font-size: 1rem;
-            width: 100px;
-            outline: none;
-            transition: all 0.3s ease;
-        }
-
-        button {
-            padding: 0.8rem 1.5rem;
-            font-size: 1rem;
-            border: none;
-            border-radius: 8px;
-            cursor: pointer;
-            transition: all 0.3s ease;
-            font-weight: 600;
-            text-transform: uppercase;
-            letter-spacing: 1px;
-        }
-
-        #generateBtn {
-            background-color: var(--accent-color);
-            color: white;
-        }
-
-        #startDrawBtn {
-            background-color: #27ae60;
-            color: white;
-        }
-
-        #resetBtn {
-            background-color: #7f8c8d;
-            color: white;
-        }
-
-        button:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
-        }
-
-        #ticketList, #resultList {
-            background: var(--card-color);
-            border-radius: 15px;
-            padding: 2rem;
-            margin: 2rem 0;
-            box-shadow: 0 8px 30px rgba(0,0,0,0.1);
-        }
-
-        .ticket {
-            background: linear-gradient(145deg, #ffffff, #f5f5f5);
-            border: none;
-            border-radius: 15px;
-            padding: 1.5rem;
-            box-shadow: 0 4px 15px rgba(0,0,0,0.05);
-            transition: all 0.3s ease;
-            width: calc(33.33% - 1rem);
-            min-width: 300px;
-            flex: 0 0 calc(33.33% - 1rem);
-            margin-bottom: 1rem;
-        }
-
-        .ticket:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 8px 25px rgba(0,0,0,0.1);
-        }
-
-        .ticket-row {
-            display: flex;
-            justify-content: center;
-            gap: 0.5rem;
-            margin-bottom: 0.5rem;
-        }
-
-        .ticket-cell {
-            width: 40px;
-            height: 40px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            border: 2px solid #e0e0e0;
-            border-radius: 50%;
-            font-weight: 600;
-            transition: all 0.3s ease;
-        }
-
-        .highlight {
-            background-color: #ffd700;
-            border-color: #ffd700;
-            animation: pulse 1s infinite;
-        }
-
-        .winner {
-            background: linear-gradient(145deg, #d4edda, #c3e6cb);
-            animation: winner 1s ease-in-out infinite;
-        }
-
-        #results {
-            list-style: none;
-            display: flex;
-            flex-wrap: wrap;
-            gap: 0.5rem;
-            justify-content: center;
-        }
-
-        #results li {
-            background: var(--primary-color);
-            color: white;
-            width: 40px;
-            height: 40px;
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-weight: 600;
-            animation: fadeIn 0.5s ease-out;
-        }
-
-        @keyframes pulse {
-            0% { transform: scale(1); }
-            50% { transform: scale(1.1); }
-            100% { transform: scale(1); }
-        }
-
-        @keyframes winner {
-            0% { transform: scale(1); }
-            50% { transform: scale(1.02); }
-            100% { transform: scale(1); }
-        }
-
-        @keyframes fadeIn {
-            from { opacity: 0; transform: scale(0.8); }
-            to { opacity: 1; transform: scale(1); }
-        }
-
-        @media (max-width: 1200px) {
-            .ticket {
-                flex: 0 0 calc(50% - 1rem);
-                width: calc(50% - 1rem);
-            }
-        }
-
-        @media (max-width: 900px) {
-            .ticket {
-                flex: 0 0 calc(50% - 1rem);
-                width: calc(50% - 1rem);
-            }
-        }
-
-        @media (max-width: 600px) {
-            .ticket {
-                flex: 0 0 100%;
-                width: 100%;
-            }
-
-            .container {
-                padding: 0 0.5rem;
-            }
-
-            .controls {
-                flex-direction: column;
-                align-items: center;
-                gap: 0.8rem;
-            }
-
-            button {
-                width: 100%;
-                max-width: 300px;
-            }
-
-            input[type="number"] {
-                width: 100%;
-                max-width: 300px;
-            }
-        }
-    </style>
+    <meta name="description" content="Simulation professionnelle de tirage de loto avec génération automatique de tickets">
+    <title>Simulation de Tirage Loto - Professionnel</title>
+    
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap" rel="stylesheet">
+    
+    <!-- Stylesheet -->
+    <link rel="stylesheet" href="styles.css">
 </head>
 <body>
     <div class="container">
-        <h1>Simulation de Tirage Loto</h1>
+        <!-- Header -->
+        <header>
+            <h1>🎰 Simulation de Tirage Loto</h1>
+            <p class="subtitle">Générez vos tickets et lancez le tirage automatique</p>
+        </header>
 
+        <!-- Controls -->
         <div class="controls">
-            <input type="number" id="ticketNumberInput" min="1" max="20" value="5" placeholder="Nombre de tickets">
-            <button id="generateBtn">Générer les tickets</button>
-            <button id="startDrawBtn">Lancer le tirage</button>
-            <button id="resetBtn">Réinitialiser</button>
+            <div class="input-group">
+                <label for="ticketNumberInput">Nombre de tickets :</label>
+                <input type="number" id="ticketNumberInput" min="1" max="20" value="5" aria-label="Nombre de tickets">
+            </div>
+            <button id="generateBtn" aria-label="Générer les tickets">
+                🎫 Générer les tickets
+            </button>
+            <button id="startDrawBtn" aria-label="Lancer le tirage">
+                ▶️ Lancer le tirage
+            </button>
+            <button id="resetBtn" aria-label="Réinitialiser">
+                🔄 Réinitialiser
+            </button>
         </div>
 
-        <div id="resultList">
+        <!-- Results Section -->
+        <section id="resultList">
             <h2>Numéros tirés</h2>
-            <ul id="results"></ul>
-        </div>
-        <div id="ticketList">
+            <ul id="results" aria-live="polite"></ul>
+        </section>
+
+        <!-- Tickets Section -->
+        <section id="ticketList">
             <h2>Vos tickets</h2>
             <div id="tickets" class="tickets-container"></div>
-        </div>
-
+        </section>
     </div>
 
-    <script>
-        function generateRandomNumber(min, max) {
-            return Math.floor(Math.random() * (max - min + 1)) + min;
-        }
-
-        function generateLottoTicket() {
-            const ticket = [];
-            const columns = Array(10).fill(0);
-
-            while (ticket.length < 15) {
-                const num = generateRandomNumber(1, 99);
-                const column = Math.floor((num - 1) / 10);
-
-                if (!ticket.includes(num) && columns[column] < 3) {
-                    ticket.push(num);
-                    columns[column]++;
-                }
-            }
-            return ticket.sort((a, b) => a - b);
-        }
-
-        function generateMultipleTickets(numberOfTickets) {
-            const tickets = [];
-            for (let i = 0; i < numberOfTickets; i++) {
-                tickets.push(generateLottoTicket());
-            }
-            return tickets;
-        }
-
-        function organizeTicket(ticket) {
-            const organizedTicket = Array.from({ length: 3 }, () => Array(10).fill(null));
-            const columns = Array(10).fill(0);
-            const rows = [0, 0, 0];
-
-            ticket.forEach(num => {
-                const column = Math.floor((num - 1) / 10);
-                let row = rows.indexOf(Math.min(...rows));
-
-                while (organizedTicket[row][column] !== null) {
-                    row = (row + 1) % 3;
-                }
-
-                organizedTicket[row][column] = num;
-                rows[row]++;
-            });
-
-            organizedTicket.forEach(row => {
-                let numbersInRow = row.filter(num => num !== null).length;
-                while (numbersInRow < 5) {
-                    const emptyColumns = row.map((num, index) => num === null ? index : null).filter(index => index !== null);
-                    const columnToFill = emptyColumns[Math.floor(Math.random() * emptyColumns.length)];
-                    const newNum = generateRandomNumber(columnToFill * 10 + 1, columnToFill * 10 + 10);
-
-                    if (!ticket.includes(newNum) && !row.includes(newNum)) {
-                        row[columnToFill] = newNum;
-                        numbersInRow++;
-                    }
-                }
-            });
-
-            return organizedTicket;
-        }
-
-        function displayTickets(tickets) {
-            const ticketsDiv = document.getElementById('tickets');
-            ticketsDiv.innerHTML = "";
-            tickets.forEach(ticket => {
-                const ticketDiv = document.createElement('div');
-                ticketDiv.className = 'ticket';
-                
-                const organizedTicket = organizeTicket(ticket);
-                
-                organizedTicket.forEach(row => {
-                    const rowDiv = document.createElement('div');
-                    rowDiv.className = 'ticket-row';
-                    
-                    row.forEach(num => {
-                        const cellDiv = document.createElement('div');
-                        cellDiv.className = 'ticket-cell';
-                        if (num !== null) {
-                            cellDiv.textContent = num;
-                            cellDiv.dataset.value = num; // Ajouter une data pour la valeur du nombre
-                        } else {
-                            cellDiv.className += ' empty-cell';
-                        }
-                        rowDiv.appendChild(cellDiv);
-                    });
-                    
-                    ticketDiv.appendChild(rowDiv);
-                });
-                
-                ticketsDiv.appendChild(ticketDiv);
-            });
-        }
-
-        function generateNumbersList() {
-            const numbers = [];
-            for (let i = 1; i <= 99; i++) {
-                numbers.push(i);
-            }
-            return numbers;
-        }
-
-        let items = generateNumbersList();
-        let drawInterval;
-        let gameActive = true;
-
-        function shuffleArray(array) {
-            for (let i = array.length - 1; i > 0; i--) {
-                const j = Math.floor(Math.random() * (i + 1));
-                [array[i], array[j]] = [array[j], array[i]];
-            }
-        }
-
-        function drawItem() {
-            if (items.length > 0 && gameActive) {
-                shuffleArray(items);
-                const drawnItem = items.pop();
-
-                const resultLi = document.createElement('li');
-                resultLi.textContent = drawnItem;
-                document.getElementById('results').appendChild(resultLi);
-
-                highlightTickets(drawnItem);
-            } else {
-                clearInterval(drawInterval); // Arrêter le tirage
-            }
-        }
-
-        function highlightTickets(drawnNumber) {
-            const ticketCells = document.querySelectorAll('.ticket-cell');
-
-            ticketCells.forEach(cell => {
-                if (parseInt(cell.dataset.value) === drawnNumber) {
-                    cell.classList.add('highlight');
-                }
-            });
-
-            checkWinningTickets();
-        }
-
-        function checkWinningTickets() {
-            const tickets = document.querySelectorAll('.ticket');
-
-            tickets.forEach(ticket => {
-                const rows = ticket.querySelectorAll('.ticket-row');
-                let hasWinningLine = false;
-
-                rows.forEach(row => {
-                    const highlightedCells = row.querySelectorAll('.ticket-cell.highlight').length;
-                    if (highlightedCells === 5) {
-                        hasWinningLine = true;
-                    }
-                });
-
-                if (hasWinningLine) {
-                    ticket.classList.add('winner');
-                    gameActive = false;
-                    alert("Un ticket a gagné !");
-                    clearInterval(drawInterval); // Arrêter le tirage
-                }
-            });
-        }
-
-        function startDraw() {
-            gameActive = true;
-            drawInterval = setInterval(drawItem, 300); // Tirage automatique toutes les secondes
-        }
-
-        function resetGame() {
-            items = generateNumbersList(); 
-            clearInterval(drawInterval); 
-            document.getElementById('results').innerHTML = "";
-            document.querySelectorAll('.ticket-cell').forEach(cell => cell.classList.remove('highlight'));
-            document.querySelectorAll('.ticket').forEach(ticket => ticket.classList.remove('winner'));
-            gameActive = false;
-        }
-
-        document.getElementById('generateBtn').addEventListener('click', () => {
-            const numberOfTickets = parseInt(document.getElementById('ticketNumberInput').value) || 5;
-const tickets = generateMultipleTickets(numberOfTickets);
-displayTickets(tickets);
-
-}); document.getElementById('startDrawBtn').addEventListener('click', startDraw);
-
-    document.getElementById('resetBtn').addEventListener('click', resetGame);
-</script>
-</body> </html> 
+    <!-- JavaScript -->
+    <script src="script.js"></script>
+</body>
+</html>
